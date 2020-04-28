@@ -1092,6 +1092,7 @@ export default class Carousel extends Component {
   }
 
   startAutoplay() {
+    this._isAutoPlayPaused = false
     const { autoplayInterval, autoplayDelay } = this.props
     this._autoplay = true
 
@@ -1110,8 +1111,10 @@ export default class Carousel extends Component {
     }, autoplayDelay)
   }
 
+  _isAutoPlayPaused = false
   pauseAutoPlay() {
     this._autoplaying = false
+    this._isAutoPlayPaused = true
     clearTimeout(this._autoplayTimeout)
     clearTimeout(this._enableAutoplayTimeout)
     clearInterval(this._autoplayInterval)
@@ -1165,7 +1168,9 @@ export default class Carousel extends Component {
         newIndex = 0
       }
       this._snapToItem(newIndex, animated, fireCallback)
-      startAutoplay()
+      if (!this._isAutoPlayPaused) {
+        startAutoplay()
+      }
     }
 
     if (this.repositionToOffset) {
